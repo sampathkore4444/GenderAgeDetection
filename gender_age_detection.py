@@ -5,8 +5,8 @@ from transformers import CLIPProcessor, CLIPModel
 import io
 
 # Load the CLIP model and processor
-model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
-processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32", force_download=True)
+processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32", force_download=True)
 
 # Define human-related labels and general labels for fallback
 human_labels = [
