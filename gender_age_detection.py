@@ -3,12 +3,9 @@ from PIL import Image
 import torch
 from transformers import CLIPProcessor, CLIPModel
 import io
-from accelerate import init_empty_weights
 
-# Load the CLIP model and processor (smaller version)
-# Using init_empty_weights to optimize memory during model loading
-with init_empty_weights():
-    model = CLIPModel.from_pretrained("openai/clip-vit-base-patch16", force_download=True)
+# Load the CLIP model and processor (smaller version) directly to CPU
+model = CLIPModel.from_pretrained("openai/clip-vit-base-patch16", force_download=True).to("cpu")
 processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch16", force_download=True)
 
 # Define human-related labels and general labels for fallback
@@ -34,7 +31,7 @@ fallback_labels = [
 # Function to classify image with fallback
 def classify_image(image):
     # Prepare the image and labels for the model
-    inputs = processor(images=image, text=fallback_labels, return_tensors="pt", padding=True)
+    inputs = processor(images=image, text=fallback_labels, return_tensors="pt", padding=True).to("cpu")
     
     # Perform classification for general content
     with torch.no_grad():
@@ -49,7 +46,7 @@ def classify_image(image):
     
     if fallback_label == "a human":
         # Proceed with specific human classification if a human is detected
-        inputs = processor(images=image, text=human_labels, return_tensors="pt", padding=True)
+        inputs = processor(images=image, text=human_labels, return_tensors="pt", padding=True).to("cpu")
         with torch.no_grad():
             outputs = model(**inputs)
         logits_per_image = outputs.logits_per_image
