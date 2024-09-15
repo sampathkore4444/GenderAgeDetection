@@ -3,10 +3,13 @@ from PIL import Image
 import torch
 from transformers import CLIPProcessor, CLIPModel
 import io
+from accelerate import init_empty_weights
 
-# Load the CLIP model and processor
-model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32", force_download=True)
-processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32", force_download=True)
+# Load the CLIP model and processor (smaller version)
+# Using init_empty_weights to optimize memory during model loading
+with init_empty_weights():
+    model = CLIPModel.from_pretrained("openai/clip-vit-base-patch16", force_download=True)
+processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch16", force_download=True)
 
 # Define human-related labels and general labels for fallback
 human_labels = [
@@ -59,7 +62,7 @@ def classify_image(image):
         return fallback_label, confidence
 
 # Streamlit UI
-st.title("Gender and Age Analyzer App powered by AI")
+st.title("Gender and Age Classification App")
 st.write("Upload an image to classify the gender and age group, or get general information.")
 
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
