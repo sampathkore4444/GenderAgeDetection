@@ -7,8 +7,10 @@ import io
 # Cache the model and processor to ensure they are loaded only once
 @st.cache_resource
 def load_model():
-    model = CLIPModel.from_pretrained("openai/clip-vit-base-patch16").to("cpu")
-    processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch16")
+    # model = CLIPModel.from_pretrained("openai/clip-vit-base-patch16").to("cpu")
+    # processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch16")
+    model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to("cpu")
+    processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
     return model, processor
 
 # Load model and processor only once
@@ -71,7 +73,7 @@ def classify_image(image):
         return fallback_label, confidence
 
 # Streamlit UI
-st.title("Bio Classify AI App")
+st.title("Bio Classify AI App ")
 st.write("Upload an image to analyze the gender and age group, or get general information.")
 
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
