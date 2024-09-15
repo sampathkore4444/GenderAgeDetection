@@ -71,7 +71,7 @@ def classify_image(image):
         return fallback_label, confidence
 
 # Streamlit UI
-st.title("Bio Classification App powered by AI")
+st.title("Bio Classify AI App")
 st.write("Upload an image to analyze the gender and age group, or get general information.")
 
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
