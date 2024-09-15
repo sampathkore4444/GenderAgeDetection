@@ -85,7 +85,7 @@ if uploaded_file is not None:
         with st.spinner("Analyzing the image..."):
             label, confidence = classify_image(image)
         
-        st.write(f"**Analyzing Result:** {label}")
+        st.write(f"**[Gender/Age] Result:** {label}")
         st.write(f"**Confidence Score:** {confidence:.2f}")
         
         # Provide option to download the classified image
