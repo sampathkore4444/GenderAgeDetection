@@ -4,9 +4,15 @@ import torch
 from transformers import CLIPProcessor, CLIPModel
 import io
 
-# Load the CLIP model and processor (smaller version) directly to CPU
-model = CLIPModel.from_pretrained("openai/clip-vit-base-patch16", force_download=True).to("cpu")
-processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch16", force_download=True)
+# Cache the model and processor to ensure they are loaded only once
+@st.cache_resource
+def load_model():
+    model = CLIPModel.from_pretrained("openai/clip-vit-base-patch16", force_download=True).to("cpu")
+    processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch16", force_download=True)
+    return model, processor
+
+# Load model and processor only once
+model, processor = load_model()
 
 # Define human-related labels and general labels for fallback
 human_labels = [
